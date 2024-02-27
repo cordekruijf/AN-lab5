@@ -10,4 +10,28 @@ vagrant@p4:~/src$ sudo python3 utils/install_rules.py -t topology.json \
 
 vagrant@p4:~/src$ simple_switch_CLI
 RuntimeCmd: table_dump MyIngress.ipv4_forwarding
+
+vagrant@p4:~/src$ sudo tshark -n -i veth0 -i veth1 -i veth2 -i veth3 \
+-T fields -e frame.time_relative -e frame.interface_name \
+-e eth -e ip -e ipv6 -e udp -e tcp
+```
+
+### Scapy
+```
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.1.1")/UDP(sport=RandShort(),dport=RandShort())
+
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.2.2")/UDP(sport=RandShort(),dport=RandShort())
+
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.3.3")/UDP(sport=RandShort(),dport=RandShort())
+
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.4.4")/UDP(sport=RandShort(),dport=RandShort())
+
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.8.8")/UDP(sport=RandShort(),dport=RandShort())
+
+>>> sendp(p, iface="veth0")
 ```
