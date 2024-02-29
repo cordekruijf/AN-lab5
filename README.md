@@ -1,6 +1,6 @@
 # AN lab 5 - P4 part 2
 
-## Commands
+## Commands - task 1
 ```
 vagrant@p4:~/src$ p4c-bm2-ss --p4v 16 --p4runtime-files \
 build/counter.p4.p4info.txt -o build/counter.json counter.p4
@@ -36,6 +36,7 @@ dst="10.0.8.8")/UDP(sport=RandShort(),dport=RandShort())
 >>> sendp(p, iface="veth0")
 ```
 
+## Commands - task 2
 ### Kill switch
 ```
 $ sudo killall simple_switch_g
@@ -46,3 +47,7 @@ RuntimeCmd: counter_read MyIngress.direct_port_counter 0
 RuntimeCmd: counter_read MyIngress.direct_port_counter 1
 RuntimeCmd: counter_read MyIngress.direct_port_counter 2
 RuntimeCmd: counter_read MyIngress.direct_port_counter 3
+
+## Commands - task 3
+### simple_switch_CLI
+RuntimeCmd: counter_read MyIngress.indirect_counter 0

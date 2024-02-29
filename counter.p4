@@ -54,20 +54,24 @@ control MyIngress(inout headers_t hdr, inout user_metadata_t umd, inout standard
     /* Source: https://github.com/nsg-ethz/p4-learning/blob/master/examples/counter/direct_counter.p4 */
 	direct_counter(CounterType.packets_and_bytes) direct_port_counter;
 
-				/* Task 2 */
-	/* TODO: Define the indirect counter */
+	/* Task 2 */
+	counter(3, CounterType.packets) indirect_counter;
 
 
     action set_egress(bit<9> port) {
-				/* Task 2 */
-		/* TODO: Add logic for counting packets according to their destination port. */
+		/* Task 2 */
+        if ((smd.egress_port & 1) == 0) {
+            indirect_counter.count(1);
+        } else {
+            indirect_counter.count(2);
+        }
 
         smd.egress_spec = port;
     }
 
     action drop() {
-				/* Task 2 */
-		/* TODO: Count for dropped packets using the indirect counter. */
+		/* Task 2 */
+        indirect_counter.count(2);
 
         mark_to_drop(smd);
     }
