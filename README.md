@@ -35,3 +35,14 @@ dst="10.0.8.8")/UDP(sport=RandShort(),dport=RandShort())
 
 >>> sendp(p, iface="veth0")
 ```
+
+### Kill switch
+```
+$ sudo killall simple_switch_g
+```
+
+### simple_switch_CLI
+RuntimeCmd: counter_read MyIngress.direct_port_counter 0
+RuntimeCmd: counter_read MyIngress.direct_port_counter 1
+RuntimeCmd: counter_read MyIngress.direct_port_counter 2
+RuntimeCmd: counter_read MyIngress.direct_port_counter 3
