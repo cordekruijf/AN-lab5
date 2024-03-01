@@ -59,11 +59,15 @@ dst="10.0.8.8")/UDP(sport=RandShort(),dport=RandShort())
 $ sudo killall simple_switch_g
 ```
 
-### simple_switch_CLI
+### Results
+```
+vagrant@p4:~/src$ simple_switch_CLI
+
 RuntimeCmd: counter_read MyIngress.direct_port_counter 0
 RuntimeCmd: counter_read MyIngress.direct_port_counter 1
 RuntimeCmd: counter_read MyIngress.direct_port_counter 2
 RuntimeCmd: counter_read MyIngress.direct_port_counter 3
+```
 
 ## Commands - task 3
 ```
@@ -74,5 +78,38 @@ vagrant@p4:~/src$ sudo python3 utils/install_rules.py -t topology.json \
 -j build/counter.json -b simple_switch_grpc
 ```
 
-### simple_switch_CLI
+### Scapy
+```
+$ sudo scapy
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.1.1")/UDP(sport=RandShort(),dport=RandShort())
+
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.2.2")/UDP(sport=RandShort(),dport=RandShort())
+
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.3.3")/UDP(sport=RandShort(),dport=RandShort())
+
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.4.4")/UDP(sport=RandShort(),dport=RandShort())
+
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.8.8")/UDP(sport=RandShort(),dport=RandShort())
+
+>>> sendp(p, iface="veth0")
+```
+
+### Results
+```
+vagrant@p4:~/src$ simple_switch_CLI
+
 RuntimeCmd: counter_read MyIngress.indirect_counter 0
+MyIngress.indirect_counter[0]= (336 bytes, 8 packets)
+RuntimeCmd: counter_read MyIngress.indirect_counter 1
+MyIngress.indirect_counter[1]= (0 bytes, 0 packets)
+RuntimeCmd: counter_read MyIngress.indirect_counter 2
+MyIngress.indirect_counter[2]= (126 bytes, 3 packets)
+RuntimeCmd: counter_read MyIngress.indirect_counter 3
+Invalid counter operation (INVALID_INDEX)
+RuntimeCmd: counter_read MyIngress.indirect_counter 4
+```
