@@ -66,5 +66,13 @@ RuntimeCmd: counter_read MyIngress.direct_port_counter 2
 RuntimeCmd: counter_read MyIngress.direct_port_counter 3
 
 ## Commands - task 3
+```
+vagrant@p4:~/src$ p4c-bm2-ss --p4v 16 --p4runtime-files \
+build/counter.p4.p4info.txt -o build/counter.json counter.p4
+vagrant@p4:~/src$ sudo killall simple_switch_g
+vagrant@p4:~/src$ sudo python3 utils/install_rules.py -t topology.json \
+-j build/counter.json -b simple_switch_grpc
+```
+
 ### simple_switch_CLI
 RuntimeCmd: counter_read MyIngress.indirect_counter 0

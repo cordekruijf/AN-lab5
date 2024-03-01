@@ -60,12 +60,7 @@ control MyIngress(inout headers_t hdr, inout user_metadata_t umd, inout standard
     action set_egress(bit<9> port) {
 		/* Task 2 */
         /* Source: https://dailyjavaconcept.com/check-number-is-even-or-odd/ */
-        if ((smd.egress_port & 1) == 0) {
-            indirect_counter.count(1);
-        } else {
-            indirect_counter.count(2);
-        }
-
+        indirect_counter.count((smd.egress_port & 1) == 0 ? 32w0 : 32w1);
         smd.egress_spec = port;
     }
 
