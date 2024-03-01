@@ -1,5 +1,21 @@
 # AN lab 5 - P4 part 2
 
+## Preparation
+Setup interfaces
+```
+#!/bin/sh
+set -e
+
+for i in $@
+do
+        sudo ip link add name veth${i} type veth peer name port${i}
+        sudo ip link set veth${i} addrgenmode none
+        sudo ip link set port${i} addrgenmode none
+        sudo ip link set dev veth${i} up
+        sudo ip link set dev port${i} up
+done
+```
+
 ## Commands - task 1
 ```
 vagrant@p4:~/src$ p4c-bm2-ss --p4v 16 --p4runtime-files \
@@ -18,6 +34,7 @@ vagrant@p4:~/src$ sudo tshark -n -i veth0 -i veth1 -i veth2 -i veth3 \
 
 ### Scapy
 ```
+$ sudo scapy
 >>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
 dst="10.0.1.1")/UDP(sport=RandShort(),dport=RandShort())
 

@@ -50,28 +50,23 @@ control MyVerifyChecksum(inout headers_t hdr, inout user_metadata_t umd) {
 
 control MyIngress(inout headers_t hdr, inout user_metadata_t umd, inout standard_metadata_t smd) {
 
-	/* Task 1 */
-    /* Source: https://github.com/nsg-ethz/p4-learning/blob/master/examples/counter/direct_counter.p4 */
-	direct_counter(CounterType.packets_and_bytes) direct_port_counter;
+				/* Task 1 */
+	/* TODO: Define the direct counter. */
 
-	/* Task 2 */
-	counter(3, CounterType.packets) indirect_counter;
+				/* Task 2 */
+	/* TODO: Define the indirect counter */
+
 
     action set_egress(bit<9> port) {
-		/* Task 2 */
-        /* Source: https://dailyjavaconcept.com/check-number-is-even-or-odd/ */
-        if ((smd.egress_port & 1) == 0) {
-            indirect_counter.count(1);
-        } else {
-            indirect_counter.count(2);
-        }
+				/* Task 2 */
+		/* TODO: Add logic for counting packets according to their destination port. */
 
         smd.egress_spec = port;
     }
 
     action drop() {
-		/* Task 2 */
-        indirect_counter.count(2);
+				/* Task 2 */
+		/* TODO: Count for dropped packets using the indirect counter. */
 
         mark_to_drop(smd);
     }
@@ -85,7 +80,7 @@ control MyIngress(inout headers_t hdr, inout user_metadata_t umd, inout standard
 		size=32;
         default_action = drop;
 		/* Task 1 */
-		counters = direct_port_counter;
+		/* TODO: Associate the direct counter with the table using the counters field. */
 
     }
 
