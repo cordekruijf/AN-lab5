@@ -120,4 +120,5 @@ vagrant@p4:~/port_knocking$ unzip port_knocking.zip
 vagrant@p4:~/port_knocking$ ./setup_topo.sh 
 vagrant@p4:~/port_knocking$ p4c-bm2-ss --p4v 16 --p4runtime-files build/port_knock.p4.p4info.txt -o build/port_knock.json port_knock.p4
 vagrant@p4:~/port_knocking$ p4c-bm2-ss --p4v 16 --p4runtime-files build/basic_forw.p4.p4info.txt -o build/basic_forw.json basic_forw.p4
+vagrant@p4:~/port_knocking$ sudo ip netns exec host1 bash
 ```
