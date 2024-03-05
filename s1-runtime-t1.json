@@ -1,0 +1,53 @@
+{
+    "target": "bmv2",
+    "p4info": "build/counter.p4.p4info.txt",
+    "bmv2_json": "build/counter.json",
+    "table_entries": [
+        {
+            "table": "MyIngress.ipv4_forwarding",
+            "default_action": true,
+            "action_name": "MyIngress.drop",
+            "action_params": {}
+        },
+        {
+            "table": "MyIngress.ipv4_forwarding",
+            "match": {
+                "hdr.ipv4.dst": "10.0.1.1"
+            },
+            "action_name": "MyIngress.set_egress",
+            "action_params": {
+                "port": 0
+            }
+        },
+        {
+            "table": "MyIngress.ipv4_forwarding",
+            "match": {
+                "hdr.ipv4.dst": "10.0.2.2"
+            },
+            "action_name": "MyIngress.set_egress",
+            "action_params": {
+                "port": 1
+            }
+        },
+        {
+            "table": "MyIngress.ipv4_forwarding",
+            "match": {
+                "hdr.ipv4.dst": "10.0.3.3"
+            },
+            "action_name": "MyIngress.set_egress",
+            "action_params": {
+                "port": 2
+            }
+        },
+        {
+            "table": "MyIngress.ipv4_forwarding",
+            "match": {
+                "hdr.ipv4.dst": "10.0.4.4"
+            },
+            "action_name": "MyIngress.set_egress",
+            "action_params": {
+                "port": 3
+            }
+        }
+    ]
+}

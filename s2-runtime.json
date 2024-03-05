@@ -1,7 +1,7 @@
 {
 	"target": "bmv2",
-	"p4info": "build/port_knock.p4.p4info.txt",
-	"bmv2_json": "build/port_knock.json",
+	"p4info": "build/basic_forw.p4.p4info.txt",
+	"bmv2_json": "build/basic_forw.json",
 	"table_entries": [
 		{
 			"table": "MyIngress.ipv4_lpm",
@@ -19,7 +19,7 @@
 			},
 			"action_name": "MyIngress.ipv4_forward",
 			"action_params": {
-				"dstAddr": "08:00:00:00:02:01",
+				"dstAddr": "08:00:00:00:01:01",
 				"port": 1
 			}
 		},
@@ -33,7 +33,7 @@
 			},
 			"action_name": "MyIngress.ipv4_forward",
 			"action_params": {
-				"dstAddr": "08:00:00:00:01:02",
+				"dstAddr": "08:00:00:00:01:03",
 				"port": 2
 			}
 		}
