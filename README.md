@@ -123,3 +123,12 @@ vagrant@p4:~/port_knocking$ p4c-bm2-ss --p4v 16 --p4runtime-files build/basic_fo
 vagrant@p4:~/port_knocking$ sudo python3 utils/install_rules.py -t topology.json -j build/port_knock.json -b simple_switch_grpc
 vagrant@p4:~/port_knocking$ sudo ip netns exec host1 bash
 ```
+
+Test ping ```10.0.2.2```
+```
+vagrant@p4:~/port_knocking$ sudo ip netns exec host1 bash
+root@p4:/home/vagrant/port_knocking# ping 10.0.2.2
+PING 10.0.2.2 (10.0.2.2) 56(84) bytes of data.
+64 bytes from 10.0.2.2: icmp_seq=1 ttl=61 time=5.41 ms
+64 bytes from 10.0.2.2: icmp_seq=2 ttl=61 time=4.11 ms
+```
