@@ -133,8 +133,10 @@ control MyIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
-    action count_ports(bit<8> port1, bit<8> port2, bit<8> port3) {
-        
+    action set_ports(bit<8> port1, bit<8> port2, bit<8> port3) {
+        knocking_ports.write(0, port1);
+        knocking_ports.write(1, port2);
+        knocking_ports.write(2, port3);
     }
 
     action increase_counter() {
@@ -161,7 +163,7 @@ control MyIngress(inout headers hdr,
     table knocking_ports_sequence {
         key = {}
         action = {
-            count_ports;
+            set_ports;
         }
         default_action = drop();
     }
