@@ -119,6 +119,9 @@ control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
 control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
+    register<bit<8>>(3) knocking_ports;
+    register<bit<8>>(1) counter;
+
     action drop() {
         mark_to_drop(standard_metadata);
     }
@@ -128,6 +131,18 @@ control MyIngress(inout headers hdr,
         hdr.ethernet.srcAddr = hdr.ethernet.dstAddr;
         hdr.ethernet.dstAddr = dstAddr;
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
+    }
+
+    action count_ports(bit<8> port1, bit<8> port2, bit<8> port3) {
+        
+    }
+
+    action increase_counter() {
+        counter.write(0, counter.read(0) + 1);
+    }
+
+    action reset_counter() {
+        counter.write(0, 0);
     }
 
     table ipv4_lpm {
@@ -143,9 +158,40 @@ control MyIngress(inout headers hdr,
         default_action = drop();
     }
 
+    table knocking_ports_sequence {
+        key = {}
+        action = {
+            count_ports;
+        }
+        default_action = drop();
+    }
+
     apply {
         if (hdr.ipv4.isValid()) {
             ipv4_lpm.apply();
+        }
+
+        if (hdr.tcp.isValid()) {
+            knocking_ports_sequence.apply();
+            
+            
+            // if (tcp.srcPort == knocking_ports.read(0)) {
+            //     knocking_ports.write(0, knocking_ports.read(1));
+            //     knocking_ports.write(1, knocking_ports.read(2));
+            //     knocking_ports.write(2, tcp.dstPort);
+
+            //     // Check if the port knocking sequence is complete
+            //     if (knocking_ports.read(0) == expected_port1 &
+            //         knocking_ports.read(1) == expected_port2 &
+            //         knocking_ports.read(2) == expected_port3) {
+            //         ipv4_lpm.apply();
+            //     }
+            // } else {
+            //     knocking_ports.write(0, 0);
+            //     knocking_ports.write(1, 0);
+            //     knocking_ports.write(2, 0);
+            //     drop();
+            // }
         }
     }
 }
