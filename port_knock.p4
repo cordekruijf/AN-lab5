@@ -166,7 +166,7 @@ control MyIngress(inout headers hdr,
 
     table knocking_ports_sequence {
         key = {}
-        action = {
+        actions = {
             set_ports;
         }
         default_action = drop();
