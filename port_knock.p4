@@ -189,14 +189,21 @@ control MyIngress(inout headers hdr,
                 bit<8> current_counter = sequence_counter;
                 // sequence_counter.read(counter, 0);
 
-                if (current_counter < 8w2) {
-                    
+                if (current_counter < 8w3) {
+                    bit<16> next_port;
+                    knocking_ports.read(next_port, current_counter);
+
+                    if (hdr.tcp.dstPort == next_port) {
+                        increase_counter();
+                    }
+
+                    reset_counter();
                 } else {
                     reset_counter();
+                    drop();
                 }
             } else {
                 drop();
-                //if everything succeed, reset ip and mac
             }
         }
     }
