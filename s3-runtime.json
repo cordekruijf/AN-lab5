@@ -36,6 +36,16 @@
 				"dstAddr": "08:00:00:00:02:02",
 				"port": 2
 			}
+		},
+		{
+			"table": "MyIngress.knocking_ports_sequence",
+			"match": {},
+			"action_name": "MyIngress.ipv4_forward",
+			"action_params": {
+				"port1": 10010,
+				"port2": 10020,
+				"port3": 10030
+			}
 		}
 	]
 }
