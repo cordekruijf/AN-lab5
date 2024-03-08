@@ -120,7 +120,9 @@ control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
     register<bit<8>>(3) knocking_ports;
-    register<bit<8>>(1) counter;
+    bit<8> sequence_counter = 0;
+    bit<32> srcIP;
+    bit<48> srcMAC;
 
     action drop() {
         mark_to_drop(standard_metadata);
@@ -140,11 +142,13 @@ control MyIngress(inout headers hdr,
     }
 
     action increase_counter() {
-        counter.write(0, counter.read(0) + 1);
+        // sequence_counter.write(0, sequence_counter.read(0) + 1);
+        sequence_counter = sequence_counter + 1;
     }
 
     action reset_counter() {
-        counter.write(0, 0);
+        // sequence_counter.write(0, 0);
+        sequence_counter = 0;
     }
 
     table ipv4_lpm {
@@ -176,24 +180,24 @@ control MyIngress(inout headers hdr,
         if (hdr.tcp.isValid()) {
             knocking_ports_sequence.apply();
             
-            
-            // if (tcp.srcPort == knocking_ports.read(0)) {
-            //     knocking_ports.write(0, knocking_ports.read(1));
-            //     knocking_ports.write(1, knocking_ports.read(2));
-            //     knocking_ports.write(2, tcp.dstPort);
+            if (!srcIP & !srcMAC) {
+                srcIP = hdr.ipv4.srcAddr;
+                srcMAC = hdr.ethernet.srcAddr;
+            }
 
-            //     // Check if the port knocking sequence is complete
-            //     if (knocking_ports.read(0) == expected_port1 &
-            //         knocking_ports.read(1) == expected_port2 &
-            //         knocking_ports.read(2) == expected_port3) {
-            //         ipv4_lpm.apply();
-            //     }
-            // } else {
-            //     knocking_ports.write(0, 0);
-            //     knocking_ports.write(1, 0);
-            //     knocking_ports.write(2, 0);
-            //     drop();
-            // }
+            if (srcIP = hdr.ipv4.srcAddr & srcMAC = hdr.ethernet.srcAddr) {
+                bit<8> current_counter = sequence_counter;
+                // sequence_counter.read(counter, 0);
+
+                if (current_counter < 8w2) {
+                    
+                } else {
+                    reset_counter();
+                }
+            } else {
+                drop();
+                //if everything succeed, reset ip and mac
+            }
         }
     }
 }
