@@ -186,7 +186,7 @@ control MyIngress(inout headers hdr,
                 srcMAC = hdr.ethernet.srcAddr;
             }
 
-            if ((srcIP == hdr.ipv4.srcAddr) & (srcMAC == hdr.ethernet.srcAddr)) {
+            if ((srcIP == hdr.ipv4.srcAddr) && (srcMAC == hdr.ethernet.srcAddr)) {
                 bit<8> current_counter = sequence_counter;
                 // sequence_counter.read(counter, 0);
 
