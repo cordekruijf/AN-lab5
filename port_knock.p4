@@ -177,7 +177,7 @@ control MyIngress(inout headers hdr,
         }
 
         if (hdr.tcp.isValid()) {
-            // knocking_ports_sequence.apply();
+            knocking_ports_sequence.apply();
 
             // bit<32> current_counter = sequence_counter;
             // // sequence_counter.read(counter, 0);
