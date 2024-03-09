@@ -190,7 +190,7 @@ control MyIngress(inout headers hdr,
                 bit<32> current_counter = sequence_counter;
                 // sequence_counter.read(counter, 0);
 
-                if (current_counter < 8w3) {
+                if (current_counter < 32w3) {
                     bit<16> next_port;
                     knocking_ports.read(next_port, current_counter);
 
