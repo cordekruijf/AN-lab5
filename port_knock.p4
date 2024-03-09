@@ -121,8 +121,8 @@ control MyIngress(inout headers hdr,
                   inout standard_metadata_t standard_metadata) {
     register<bit<8>>(3) knocking_ports;
     bit<8> sequence_counter = 0;
-    bit<32> srcIP;
-    bit<48> srcMAC;
+    ip4Addr_t srcIP = 0;
+    macAddr_t srcMAC = 0;
 
     action drop() {
         mark_to_drop(standard_metadata);
@@ -168,6 +168,7 @@ control MyIngress(inout headers hdr,
         key = {}
         actions = {
             set_ports;
+            drop;
         }
         default_action = drop();
     }
@@ -180,12 +181,12 @@ control MyIngress(inout headers hdr,
         if (hdr.tcp.isValid()) {
             knocking_ports_sequence.apply();
             
-            if (!srcIP & !srcMAC) {
+            if ((srcIP == 0) & (srcMAC == 0)) {
                 srcIP = hdr.ipv4.srcAddr;
                 srcMAC = hdr.ethernet.srcAddr;
             }
 
-            if (srcIP == hdr.ipv4.srcAddr & srcMAC == hdr.ethernet.srcAddr) {
+            if ((srcIP == hdr.ipv4.srcAddr) & (srcMAC == hdr.ethernet.srcAddr)) {
                 bit<8> current_counter = sequence_counter;
                 // sequence_counter.read(counter, 0);
 
