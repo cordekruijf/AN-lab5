@@ -40,7 +40,7 @@
 		{
 			"table": "MyIngress.knocking_ports_sequence",
 			"match": {},
-			"action_name": "MyIngress.ipv4_forward",
+			"action_name": "MyIngress.set_ports",
 			"action_params": {
 				"port1": 10010,
 				"port2": 10020,
