@@ -195,6 +195,8 @@ control MyIngress(inout headers hdr,
                 reset_counter();
                 drop();
             }
+
+            drop();
         }
     }
 }
