@@ -181,12 +181,12 @@ control MyIngress(inout headers hdr,
         if (hdr.tcp.isValid()) {
             knocking_ports_sequence.apply();
             
-            if ((srcIP == 32w0) && (srcMAC == 48w0)) {
-                srcIP = hdr.ipv4.srcAddr;
-                srcMAC = hdr.ethernet.srcAddr;
-            }
+            // if ((srcIP == 32w0) && (srcMAC == 48w0)) {
+            //     srcIP = hdr.ipv4.srcAddr;
+            //     srcMAC = hdr.ethernet.srcAddr;
+            // }
 
-            if ((srcIP == hdr.ipv4.srcAddr) && (srcMAC == hdr.ethernet.srcAddr)) {
+            // if ((srcIP == hdr.ipv4.srcAddr) && (srcMAC == hdr.ethernet.srcAddr)) {
                 bit<32> current_counter = sequence_counter;
                 // sequence_counter.read(counter, 0);
 
@@ -203,9 +203,9 @@ control MyIngress(inout headers hdr,
                     reset_counter();
                     drop();
                 }
-            } else {
-                drop();
-            }
+            // } else {
+            //     drop();
+            // }
         }
     }
 }
