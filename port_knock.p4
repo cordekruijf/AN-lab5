@@ -119,8 +119,8 @@ control MyVerifyChecksum(inout headers hdr, inout metadata meta) {
 control MyIngress(inout headers hdr,
                   inout metadata meta,
                   inout standard_metadata_t standard_metadata) {
-    register<bit<8>>(3) knocking_ports;
-    bit<8> sequence_counter = 0;
+    register<bit<16>>(3) knocking_ports;
+    bit<32> sequence_counter = 0;
     ip4Addr_t srcIP = 0;
     macAddr_t srcMAC = 0;
 
@@ -135,7 +135,7 @@ control MyIngress(inout headers hdr,
         hdr.ipv4.ttl = hdr.ipv4.ttl - 1;
     }
 
-    action set_ports(bit<8> port1, bit<8> port2, bit<8> port3) {
+    action set_ports(bit<16> port1, bit<16> port2, bit<16> port3) {
         knocking_ports.write(0, port1);
         knocking_ports.write(1, port2);
         knocking_ports.write(2, port3);
@@ -148,7 +148,7 @@ control MyIngress(inout headers hdr,
 
     action reset_counter() {
         // sequence_counter.write(0, 0);
-        sequence_counter = 0;
+        sequence_counter = 32w0;
     }
 
     table ipv4_lpm {
@@ -187,7 +187,7 @@ control MyIngress(inout headers hdr,
             }
 
             if ((srcIP == hdr.ipv4.srcAddr) && (srcMAC == hdr.ethernet.srcAddr)) {
-                bit<8> current_counter = sequence_counter;
+                bit<32> current_counter = sequence_counter;
                 // sequence_counter.read(counter, 0);
 
                 if (current_counter < 8w3) {
