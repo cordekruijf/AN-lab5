@@ -181,7 +181,7 @@ control MyIngress(inout headers hdr,
         if (hdr.tcp.isValid()) {
             knocking_ports_sequence.apply();
             
-            if ((srcIP == 32w0) & (srcMAC == 32w0)) {
+            if ((srcIP == 32w0) & (srcMAC == 48w0)) {
                 srcIP = hdr.ipv4.srcAddr;
                 srcMAC = hdr.ethernet.srcAddr;
             }
