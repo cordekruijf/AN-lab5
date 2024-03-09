@@ -39,7 +39,12 @@
 		},
 		{
 			"table": "MyIngress.knocking_ports_sequence",
-			"match": {},
+			"match": {
+				"hdr.ipv4.dstAddr": [
+					"10.0.2.2",
+					32
+				]
+			},
 			"action_name": "MyIngress.set_ports",
 			"action_params": {
 				"port1": 10010,

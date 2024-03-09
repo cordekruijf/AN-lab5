@@ -177,24 +177,24 @@ control MyIngress(inout headers hdr,
         }
 
         if (hdr.tcp.isValid()) {
-            knocking_ports_sequence.apply();
+            // knocking_ports_sequence.apply();
 
-            bit<32> current_counter = sequence_counter;
-            // sequence_counter.read(counter, 0);
+            // bit<32> current_counter = sequence_counter;
+            // // sequence_counter.read(counter, 0);
 
-            if (current_counter < 32w3) {
-                bit<16> next_port;
-                knocking_ports.read(next_port, current_counter);
+            // if (current_counter < 32w3) {
+            //     bit<16> next_port;
+            //     knocking_ports.read(next_port, current_counter);
 
-                if (hdr.tcp.dstPort == next_port) {
-                    increase_counter();
-                }
+            //     if (hdr.tcp.dstPort == next_port) {
+            //         increase_counter();
+            //     }
 
-                reset_counter();
-            } else {
-                reset_counter();
-                drop();
-            }
+            //     reset_counter();
+            // } else {
+            //     reset_counter();
+            //     drop();
+            // }
 
             drop();
         }
