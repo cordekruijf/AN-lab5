@@ -124,11 +124,33 @@ vagrant@p4:~/port_knocking$ sudo python3 utils/install_rules.py -t topology.json
 vagrant@p4:~/port_knocking$ sudo ip netns exec host1 bash
 ```
 
-Test ping ```10.0.2.2```
+### Test ping ```10.0.2.2```
 ```
 vagrant@p4:~/port_knocking$ sudo ip netns exec host1 bash
 root@p4:/home/vagrant/port_knocking# ping 10.0.2.2
 PING 10.0.2.2 (10.0.2.2) 56(84) bytes of data.
 64 bytes from 10.0.2.2: icmp_seq=1 ttl=61 time=5.41 ms
 64 bytes from 10.0.2.2: icmp_seq=2 ttl=61 time=4.11 ms
+```
+
+### Test port knocking
+#### Host 1
+```
+vagrant@p4:~/port_knocking$ sudo ip netns exec host1 bash
+root@p4:/home/vagrant/port_knocking# scapy
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.2.2")/UDP(sport=RandShort(),dport=10010)
+>>> sendp(p, iface="s1veth1")
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.2.2")/UDP(sport=RandShort(),dport=10020)
+>>> sendp(p, iface="s1veth1")
+>>> p = Ether(src=RandMAC(),dst=RandMAC())/IP(src=RandIP(), \
+dst="10.0.2.2")/UDP(sport=RandShort(),dport=10030)
+>>> sendp(p, iface="s1veth1")
+```
+
+#### Host 2
+```
+vagrant@p4:~/port_knocking$ sudo ip netns exec host2 bash
+root@p4:/home/vagrant/port_knocking# sudo tshark -n -i s3veth2  -T fields -e frame.time_relative -e frame.interface_name -e eth -e ip -e ipv6 -e udp -e tcp
 ```

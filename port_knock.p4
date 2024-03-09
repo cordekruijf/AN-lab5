@@ -121,8 +121,6 @@ control MyIngress(inout headers hdr,
                   inout standard_metadata_t standard_metadata) {
     register<bit<16>>(3) knocking_ports;
     bit<32> sequence_counter = 0;
-    ip4Addr_t srcIP = 0;
-    macAddr_t srcMAC = 0;
 
     action drop() {
         mark_to_drop(standard_metadata);
@@ -180,32 +178,23 @@ control MyIngress(inout headers hdr,
 
         if (hdr.tcp.isValid()) {
             knocking_ports_sequence.apply();
-            
-            // if ((srcIP == 32w0) && (srcMAC == 48w0)) {
-            //     srcIP = hdr.ipv4.srcAddr;
-            //     srcMAC = hdr.ethernet.srcAddr;
-            // }
 
-            // if ((srcIP == hdr.ipv4.srcAddr) && (srcMAC == hdr.ethernet.srcAddr)) {
-                bit<32> current_counter = sequence_counter;
-                // sequence_counter.read(counter, 0);
+            bit<32> current_counter = sequence_counter;
+            // sequence_counter.read(counter, 0);
 
-                if (current_counter < 32w3) {
-                    bit<16> next_port;
-                    knocking_ports.read(next_port, current_counter);
+            if (current_counter < 32w3) {
+                bit<16> next_port;
+                knocking_ports.read(next_port, current_counter);
 
-                    if (hdr.tcp.dstPort == next_port) {
-                        increase_counter();
-                    }
-
-                    reset_counter();
-                } else {
-                    reset_counter();
-                    drop();
+                if (hdr.tcp.dstPort == next_port) {
+                    increase_counter();
                 }
-            // } else {
-            //     drop();
-            // }
+
+                reset_counter();
+            } else {
+                reset_counter();
+                drop();
+            }
         }
     }
 }
